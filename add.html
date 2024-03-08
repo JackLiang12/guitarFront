@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .formGuitar {
+        width: 100%;
+        height: 50vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .displayInfo {
+        height: 50vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="formGuitar">
+      <label>Serial Number:</label>
+      <input id="serialNumber" />
+      <label>Price:</label>
+      <input id="price" />
+      <label>Builder:</label>
+      <input id="builder" />
+      <label>Model:</label>
+      <input id="model" />
+      <label>Type:</label>
+      <input id="type" />
+      <label>Black Wood:</label>
+      <input id="backWood" />
+      <label>Top Wood:</label>
+      <input id="topWood" />
+      <button onclick="addGuitar()" style="margin-top: 10px">Add Guitar</button>
+    </div>
+    <div class="displayInfo">
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody id="result"></tbody>
+      </table>
+    </div>
+
+    <script>
+      let host = "http://localhost:8080";
+
+async function addGuitar(){
+  let message ="";
+  let wserialNumber = document.getElementById("serialNumber").value.toUpperCase();
+  let wprice = document.getElementById("price").value.toUpperCase();
+  let wbuilder = document.getElementById("builder").value.toUpperCase();
+  let wmodel = document.getElementById("model").value.toUpperCase();
+  let wtype = document.getElementById("type").value.toUpperCase();
+  let wbackwood = document.getElementById("backWood").value.toUpperCase();
+  let wtopWood = document.getElementById("topWood").value.toUpperCase();
+  let guitar =  {serialNumber: wserialNumber, price: wprice, builder: wbuilder, model: wmodel, type: wtype, backWood: wbackwood, topWood: wtopWood}
+
+
+
+  alert("You've entered" + JSON.stringify(guitar));
+
+  let request = {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify(guitar)
+                };
+
+                let response = await fetch(host + "/guitars/add", request);
+
+                if(response.status == 200) {
+                  message = "Saved Correctly";
+                } else {
+                  console.log(response);
+                  message = "Something went wrong! Duck data could not be saved.";
+                }
+                alert(message);
+
+}
+    </script>
+  </body>
+</html>
